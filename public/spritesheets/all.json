@@ -1,0 +1,55 @@
+{
+  "frames": {
+    "slime1": {
+      "frame": {
+        "x": 16,
+        "y": 16,
+        "w": 16,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 16,
+        "w": 16,
+        "h": 16
+      }
+    },
+    "slime2": {
+      "frame": {
+        "x": 64,
+        "y": 16,
+        "w": 16,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "spriteSourceSize": {
+        "x": 64,
+        "y": 16,
+        "w": 16,
+        "h": 16
+      }
+    }
+  },
+  "meta": {
+    "image": "../characters/slime-green.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 240,
+      "h": 122
+    },
+    "scale": 1
+  },
+  "animations": {
+    "slime": [
+      "slime1",
+      "slime2"
+    ]
+  }
+}
