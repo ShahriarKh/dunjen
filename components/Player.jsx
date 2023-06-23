@@ -1,7 +1,15 @@
 import css from "./Player.module.scss";
+import { SCALE } from "@/app/vars";
 
-export default function Player({ position }) {
+export default function Player({ position, face }) {
   return (
-    <span className={css.player} style={{ top: `${position[1] * 16 * 6 - 16}px`, left: `${position[0] * 16 * 6}px` }} />
+    <span
+      className={css.player}
+      style={{
+        top: `${position[1] * 16 * SCALE - 16}px`,
+        left: `${position[0] * 16 * SCALE}px`,
+        transform: face === "left" ? "scaleX(-1)" : "scaleX(1)",
+      }}
+    />
   );
 }

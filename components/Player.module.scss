@@ -3,5 +3,14 @@
 .player {
   composes: wall from "./Maze.module.scss";
   position: absolute;
-  background-position: 0 -192px * $scale;
+  animation: breath 2s steps(2, jump-none) infinite;
+}
+
+@keyframes breath {
+  from {
+    background-position: -0px -192px * $scale;
+  }
+  to {
+    background-position: -448px -192px * $scale;
+  }
 }
