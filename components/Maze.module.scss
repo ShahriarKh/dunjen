@@ -1,0 +1,26 @@
+$size: 16px;
+
+.maze {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), $size);
+  grid-template-rows: repeat(var(--rows), $size);
+  image-rendering: pixelated;
+}
+
+.wall,
+.path {
+  width: $size;
+  height: $size;
+  background-image: url("../public/spritesheet.png");
+  background-size: 900%; // (100% + 8*100% - 8bit graphics)
+  background-repeat: no-repeat;
+}
+
+.wall {
+  background-position: -16px -96px;
+}
+
+.path {
+  background-position: -16px -128px;
+}
