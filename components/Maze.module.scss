@@ -1,4 +1,4 @@
-$size: 16px;
+@use "../app/vars" as *;
 
 .maze {
   position: relative;
@@ -18,9 +18,9 @@ $size: 16px;
 }
 
 .wall {
-  background-position: -16px -96px;
+  background-position: -16px * $scale -96px * $scale;
 }
 
 .path {
-  background-position: -16px -128px;
+  background-position: -16px * $scale -128px * $scale;
 }

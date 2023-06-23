@@ -1,5 +1,7 @@
+@use "../app/vars" as *;
+
 .player {
   composes: wall from "./Maze.module.scss";
   position: absolute;
-  background-position: -0 -192px;
+  background-position: 0 -192px * $scale;
 }
