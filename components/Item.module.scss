@@ -3,15 +3,26 @@
 .item {
   composes: path from "./Maze.module.scss";
   position: absolute;
-  // animation: breath 2s steps(2, jump-none) infinite;
-  background-position: -112px * $scale -192px * $scale;
+  animation: flash 1s steps(2, jump-none) infinite;
 }
 
-// @keyframes breath {
-//   from {
-//     background-position: -0px -192px * $scale;
-//   }
-//   to {
-//     background-position: -112px * $scale -192px * $scale;
-//   }
-// }
+.potion {
+  background-position: -80px * $scale -112px * $scale;
+}
+
+.coin {
+  background-position: -64px * $scale -80px * $scale;
+}
+
+.heart {
+  background-position: -80px * $scale -96px * $scale;
+}
+
+@keyframes flash {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(0.9);
+  }
+}

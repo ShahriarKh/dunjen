@@ -15,7 +15,7 @@ export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
-  const [maze, setMaze] = useState([[]]);
+  const [maze, setMaze, getMaze] = useState([[]]);
   const [playerPosition, setPlayerPosition] = useState([1, 0]);
   const [playerFace, setPlayerFace] = useState("right");
   const [items, setItems] = useState([]);
@@ -24,32 +24,37 @@ export default function Page() {
     return Math.floor(Math.random() * max) + min;
   }
 
-  function handeNewGame() {
+  async function handeNewGame() {
     let MAZE_WIDTH = randomNumber(3, 40);
     let MAZE_HEIGHT = randomNumber(3, 40);
+
     let newMaze = generateMaze(MAZE_WIDTH, MAZE_HEIGHT);
-    let newItems = generateItems(MAZE_WIDTH, MAZE_HEIGHT);
+    let newItems = generateItems(MAZE_WIDTH, MAZE_HEIGHT, newMaze);
+
     setMaze(newMaze);
     setItems(newItems);
-    console.log(newItems);
-    console.log("width", MAZE_WIDTH, "height", MAZE_HEIGHT);
     setPlayerPosition([newMaze[0].indexOf("p"), 0]);
   }
 
-  function generateItems(MAZE_WIDTH, MAZE_HEIGHT) {
+  function generateItems(MAZE_WIDTH, MAZE_HEIGHT, newMaze) {
     let generatedItems = [];
     const randomItems = {
       potion: randomNumber(0, 2),
       coin: randomNumber(2, 6),
-      heart: randomNumber(0, 1),
+      heart: randomNumber(0, 2),
     };
     Object.entries(randomItems).map((item) => {
       for (let i = 0; i < item[1]; i++) {
-        const x = randomNumber(1, MAZE_WIDTH - 1);
-        const y = randomNumber(1, MAZE_HEIGHT - 1);
+        let x = 0;
+        let y = 0;
+        while (newMaze[y][x] == "w" || generatedItems.some((item) => (item.x == x) & (item.y == y))) {
+          x = randomNumber(1, MAZE_WIDTH - 1);
+          y = randomNumber(1, MAZE_HEIGHT - 1);
+        }
         generatedItems.push({ x: x, y: y, name: item[0] });
       }
     });
+    console.log(generatedItems);
     return generatedItems;
   }
 
@@ -80,11 +85,11 @@ export default function Page() {
 
   return (
     <div className={css.app}>
-      <HUD openHelp={(showHelp) => setShowHelp(true)} newGame={handeNewGame} />
+      <HUD openHelp={() => setShowHelp(true)} newGame={handeNewGame} />
       <Maze handleMove={handleMove} maze={maze}>
         <Player position={playerPosition} face={playerFace} />
         {items?.map((item) => {
-          return <Item x={item.x} y={item.y} />;
+          return <Item x={item.x} y={item.y} name={item.name} />;
         })}
       </Maze>
       {(showHelp || showResult) && (
