@@ -1,6 +1,9 @@
 .hud {
   display: grid;
-  grid-template-columns: auto auto 1fr;
-  width: 90vw;
+  grid-template-columns: auto auto 1fr auto auto;
+  align-items: center;
+  justify-content: center;
   gap: 24px;
+  color: white;
+  width: calc(80vw - 64px);
 }

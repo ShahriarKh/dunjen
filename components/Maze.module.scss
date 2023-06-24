@@ -6,9 +6,9 @@
   grid-template-columns: repeat(var(--cols), $size);
   grid-template-rows: repeat(var(--rows), $size);
 
-  max-height: 75vh;
-  max-width: 90vw;
-  overflow: auto;
+  // max-height: 80vh;
+  // max-width: 90vw;
+  margin: auto;
 
   // &:not(:focus) {
   //   overflow: hidden;

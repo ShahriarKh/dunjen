@@ -1,6 +1,6 @@
 @use "../app/vars" as *;
 
-.player {
+.item {
   composes: path from "./Maze.module.scss";
   position: absolute;
   // animation: breath 2s steps(2, jump-none) infinite;

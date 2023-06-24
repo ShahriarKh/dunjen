@@ -1,4 +1,4 @@
-export function generateMaze(height = 15, width = 15) {
+export function generateMaze(width = 15, height = 15) {
   let maze = [];
 
   function surroundingCells(random_wall) {
