@@ -1,5 +1,5 @@
 import css from "./Player.module.scss";
-import { SCALE } from "@/app/vars";
+import { SCALE } from "@/utils/shared";
 
 export default function Player({ position, face }) {
   return (

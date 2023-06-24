@@ -1,8 +1,7 @@
 import css from "./Item.module.scss";
-import { SCALE } from "@/app/vars";
+import { SCALE } from "@/utils/shared";
 
 export default function Item({ x, y, name }) {
-  console.log(name);
   return (
     <span
       className={css.item + " " + css[name]}

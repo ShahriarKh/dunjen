@@ -6,25 +6,33 @@ import Maze from "@/components/Maze";
 import ModalOverlay from "@/components/ModalOverlay";
 import HelpModal from "@/components/HelpModal";
 import ResultModal from "@/components/ResultModal";
-import { useState, useEffect, createElement } from "react";
+import { useState, useEffect } from "react";
 import { generateMaze } from "@/utils/generateMaze";
 import Player from "@/components/Player";
 import Item from "@/components/Item";
+import { randomNumber } from "@/utils/shared";
+import { generateItems } from "@/utils/generateItems";
 
 export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
-  const [maze, setMaze, getMaze] = useState([[]]);
+  const [maze, setMaze] = useState([[]]);
   const [playerPosition, setPlayerPosition] = useState([1, 0]);
   const [playerFace, setPlayerFace] = useState("right");
   const [items, setItems] = useState([]);
+  const [exitPoint, setExitPoint] = useState([0, 0]);
+  const [score, setScore] = useState(0);
 
-  function randomNumber(min, max) {
-    return Math.floor(Math.random() * max) + min;
-  }
+  const SCORES = {
+    potion: 50,
+    coin: 20,
+    heart: 10,
+  };
 
-  async function handeNewGame() {
+  function handeNewGame() {
+    setScore(0);
+
     let MAZE_WIDTH = randomNumber(3, 40);
     let MAZE_HEIGHT = randomNumber(3, 40);
 
@@ -33,31 +41,19 @@ export default function Page() {
 
     setMaze(newMaze);
     setItems(newItems);
+    setExitPoint([MAZE_HEIGHT - 1, newMaze[MAZE_HEIGHT - 1].indexOf("p")]);
     setPlayerPosition([newMaze[0].indexOf("p"), 0]);
   }
 
-  function generateItems(MAZE_WIDTH, MAZE_HEIGHT, newMaze) {
-    let generatedItems = [];
-    const randomItems = {
-      potion: randomNumber(0, 2),
-      coin: randomNumber(2, 6),
-      heart: randomNumber(0, 2),
-    };
-    Object.entries(randomItems).map((item) => {
-      for (let i = 0; i < item[1]; i++) {
-        let x = 0;
-        let y = 0;
-        while (newMaze[y][x] == "w" || generatedItems.some((item) => (item.x == x) & (item.y == y))) {
-          x = randomNumber(1, MAZE_WIDTH - 1);
-          y = randomNumber(1, MAZE_HEIGHT - 1);
-        }
-        generatedItems.push({ x: x, y: y, name: item[0] });
-      }
-    });
-    console.log(generatedItems);
-    return generatedItems;
-  }
+  useEffect(() => {
+    const [x, y] = playerPosition;
+    let touchedItem = items.find((item) => item.x == x && item.y == y);
+    if (touchedItem) {
+      setScore((score) => score + SCORES[touchedItem.name]);
+    }
+  }, [playerPosition]);
 
+  // generate a maze on page load
   useEffect(() => {
     handeNewGame();
   }, []);
@@ -85,11 +81,11 @@ export default function Page() {
 
   return (
     <div className={css.app}>
-      <HUD openHelp={() => setShowHelp(true)} newGame={handeNewGame} />
+      <HUD openHelp={() => setShowHelp(true)} newGame={handeNewGame} score={score} />
       <Maze handleMove={handleMove} maze={maze}>
         <Player position={playerPosition} face={playerFace} />
         {items?.map((item) => {
-          return <Item x={item.x} y={item.y} name={item.name} />;
+          return <Item x={item.x} y={item.y} name={item.name} key={item.x + "," + item.y} />;
         })}
       </Maze>
       {(showHelp || showResult) && (
