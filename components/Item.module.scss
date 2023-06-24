@@ -1,0 +1,17 @@
+@use "../app/vars" as *;
+
+.player {
+  composes: path from "./Maze.module.scss";
+  position: absolute;
+  // animation: breath 2s steps(2, jump-none) infinite;
+  background-position: -112px * $scale -192px * $scale;
+}
+
+// @keyframes breath {
+//   from {
+//     background-position: -0px -192px * $scale;
+//   }
+//   to {
+//     background-position: -112px * $scale -192px * $scale;
+//   }
+// }
