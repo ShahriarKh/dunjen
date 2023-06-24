@@ -1,0 +1,6 @@
+.hud {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  width: 90vw;
+  gap: 24px;
+}

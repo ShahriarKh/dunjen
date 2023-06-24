@@ -1,6 +1,4 @@
-export function generateMaze(height = 11, width = 27) {
-  // let height = 11;
-  // let width = 27;
+export function generateMaze(height = 15, width = 15) {
   let maze = [];
 
   // Find number of surrounding cells

@@ -9,7 +9,7 @@ export default function Maze(params) {
   const [maze, setMaze] = useState([[]]);
 
   useEffect(() => {
-    setMaze(generateMaze(11, 27));
+    setMaze(generateMaze(27, 40));
   }, []);
 
   const [playerPosition, setPlayerPosition] = useState([1, 0]);

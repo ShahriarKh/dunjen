@@ -2,9 +2,21 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: erfan;
+  scrollbar-width: thin;
+  image-rendering: pixelated;
+}
+
+html {
+  font-size: 28px;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+@font-face {
+  font-family: erfan;
+  src: url("../public/erfan.ttf");
 }

@@ -5,7 +5,10 @@
   display: grid;
   grid-template-columns: repeat(var(--cols), $size);
   grid-template-rows: repeat(var(--rows), $size);
-  image-rendering: pixelated;
+
+  max-height: 75vh;
+  max-width: 90vw;
+  overflow: auto;
 }
 
 .wall,
@@ -18,7 +21,9 @@
 }
 
 .wall {
+  background-color: #1c1d2291;
   background-position: -16px * $scale -96px * $scale;
+  background-blend-mode: soft-light;
 }
 
 .path {
