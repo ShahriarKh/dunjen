@@ -5,7 +5,7 @@ export function generateItems(MAZE_WIDTH, MAZE_HEIGHT, newMaze) {
   const randomItems = {
     potion: randomNumber(0, 2),
     coin: randomNumber(1, 6),
-    heart: randomNumber(0, 1),
+    heart: randomNumber(0, 2),
   };
   Object.entries(randomItems).map((item) => {
     for (let i = 0; i < item[1]; i++) {

@@ -1,0 +1,15 @@
+.modal {
+  width: 240px;
+  margin: auto;
+  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+  background-color: #1c1d22;
+  color: white;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 2rem;
+  direction: rtl;
+}
