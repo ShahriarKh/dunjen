@@ -1,12 +1,12 @@
 @use "./vars" as *;
 
 .app {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 32px;
   background-color: rgb(28, 29, 34);
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
   padding: 32px;
 }

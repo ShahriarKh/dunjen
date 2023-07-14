@@ -4,7 +4,7 @@ import HUD from "@/components/HUD";
 import css from "./page.module.scss";
 import Maze from "@/components/Maze";
 import ModalOverlay from "@/components/ModalOverlay";
-import HelpModal from "@/components/HelpModal";
+// import HelpModal from "@/components/HelpModal";
 import ResultModal from "@/components/ResultModal";
 import { useState, useEffect, useReducer } from "react";
 import { generateMaze } from "@/utils/generateMaze";
@@ -13,7 +13,12 @@ import Item from "@/components/Item";
 import { randomNumber } from "@/utils/shared";
 import { generateItems } from "@/utils/generateItems";
 import { SFX } from "@/utils/sfx";
-import { SCORES } from "@/utils/constanst";
+
+const SCORES = {
+  potion: 50,
+  coin: 20,
+  heart: 10,
+};
 
 export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
@@ -27,17 +32,18 @@ export default function Page() {
   const [score, setScore] = useState(0);
   const [canPlay, setCanPlay] = useState(false);
   const [lang, setLang] = useState("en");
+  const [mazeDifficulty, setMazeDifficulty] = useState(0);
 
   const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
   function handeNewGame() {
     SFX.newGame.play();
-    setScore(0);
+    // setScore(0);
     setShowResult(false);
     setCanPlay(true);
 
-    let mazeWidth = randomNumber(4, 30);
-    let mazeHeight = randomNumber(4, 30);
+    let mazeWidth = randomNumber(4 + mazeDifficulty, 6 + mazeDifficulty);
+    let mazeHeight = randomNumber(4 + mazeDifficulty, 6 + mazeDifficulty);
 
     let newMaze = generateMaze(mazeWidth, mazeHeight);
     let newItems = generateItems(mazeWidth, mazeHeight, newMaze);
@@ -62,9 +68,7 @@ export default function Page() {
     lang === "en" ? setLang("fa") : setLang("en");
   }
 
-  useEffect(() => {
-    const [x, y] = playerPosition;
-    // touching items
+  function handleItemTouch(x, y) {
     let touchedItem = items.find((item) => item.x == x && item.y == y);
     if (touchedItem) {
       setScore((score) => score + SCORES[touchedItem.name]);
@@ -72,17 +76,21 @@ export default function Page() {
       let removedItems = items.filter((item) => item != touchedItem);
       setItems(removedItems);
     }
-    // winning
+  }
+
+  function handleWin(x, y) {
     if (x == exitPoint[0] && y == exitPoint[1]) {
       setShowResult(true);
       setCanPlay(false);
+      setMazeDifficulty((mazeDifficulty) => mazeDifficulty + 1);
     }
-  }, [playerPosition]);
+  }
 
-  // load game
   useEffect(() => {
-    handeNewGame();
-  }, []);
+    const [x, y] = playerPosition;
+    handleItemTouch(x, y);
+    handleWin(x, y);
+  }, [playerPosition]);
 
   function handleMove(e) {
     e.preventDefault();
@@ -106,6 +114,11 @@ export default function Page() {
       }
     }
   }
+
+  // load game on first render
+  useEffect(() => {
+    handeNewGame();
+  }, []);
 
   return (
     <div className={css.app}>
