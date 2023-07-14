@@ -6,7 +6,7 @@ import Maze from "@/components/Maze";
 import ModalOverlay from "@/components/ModalOverlay";
 // import HelpModal from "@/components/HelpModal";
 import ResultModal from "@/components/ResultModal";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useRef } from "react";
 import { generateMaze } from "@/utils/generateMaze";
 import Player from "@/components/Player";
 import Item from "@/components/Item";
@@ -36,7 +36,10 @@ export default function Page() {
 
   const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
+  const appRef = useRef(null);
+
   function handeNewGame() {
+    appRef.current.focus();
     SFX.newGame.play();
     // setScore(0);
     setShowResult(false);
@@ -93,7 +96,6 @@ export default function Page() {
   }, [playerPosition]);
 
   function handleMove(e) {
-    e.preventDefault();
     if (canPlay) {
       const [x, y] = playerPosition;
       SFX.click.play();
@@ -121,7 +123,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className={css.app}>
+    <div className={css.app} onKeyDown={handleMove} tabIndex={0} ref={appRef}>
       <HUD
         openHelp={() => setShowHelp(true)}
         newGame={handeNewGame}
@@ -131,7 +133,7 @@ export default function Page() {
         lang={lang}
         toggleLang={toggleLang}
       />
-      <Maze handleMove={handleMove} maze={maze}>
+      <Maze maze={maze}>
         <Player position={playerPosition} face={playerFace} />
         {items?.map((item) => {
           return <Item x={item.x} y={item.y} name={item.name} key={item.x + "," + item.y} />;

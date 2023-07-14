@@ -10,7 +10,8 @@
   background-color: #353c41;
   color: white;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: #4fd746;
   }
 }
