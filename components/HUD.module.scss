@@ -1,10 +1,16 @@
 .hud {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto auto;
+  display: flex;
+  grid-template-columns: auto 1fr auto auto auto;
   align-items: center;
   justify-content: center;
   gap: 24px;
   color: white;
   width: calc(80vw - 64px);
   font-size: 1.5rem;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    gap: 16px;
+  }
 }

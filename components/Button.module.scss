@@ -5,8 +5,9 @@
   padding: 0 8px 8px;
   cursor: pointer;
   text-align: center;
-  width: 112px;
-  background-color: #677882;
+  width: max-content;
+  min-width: 1.5rem;
+  background-color: #353c41;
   color: white;
 
   &:hover {

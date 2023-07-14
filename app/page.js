@@ -6,13 +6,14 @@ import Maze from "@/components/Maze";
 import ModalOverlay from "@/components/ModalOverlay";
 import HelpModal from "@/components/HelpModal";
 import ResultModal from "@/components/ResultModal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { generateMaze } from "@/utils/generateMaze";
 import Player from "@/components/Player";
 import Item from "@/components/Item";
 import { randomNumber } from "@/utils/shared";
 import { generateItems } from "@/utils/generateItems";
-import { clickSound, coinSound, newGameSound, themeSong, potion2Sound, potionSound } from "@/utils/sfx";
+import { SFX } from "@/utils/sfx";
+import { SCORES } from "@/utils/constanst";
 
 export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
@@ -25,38 +26,25 @@ export default function Page() {
   const [exitPoint, setExitPoint] = useState([0, 0]);
   const [score, setScore] = useState(0);
   const [canPlay, setCanPlay] = useState(false);
-  const [playSong, setPlaySong] = useState(false);
+  const [lang, setLang] = useState("en");
 
-  // themeSong.loop = true;
-  themeSong.volume = 0.1;
-
-  const SCORES = {
-    potion: 50,
-    coin: 20,
-    heart: 10,
-  };
-
-  const SOUNDS = {
-    coin: coinSound,
-    potion: potionSound,
-    heart: potion2Sound,
-  };
+  const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
   function handeNewGame() {
-    newGameSound.play();
+    SFX.newGame.play();
     setScore(0);
     setShowResult(false);
     setCanPlay(true);
 
-    let MAZE_WIDTH = randomNumber(4, 6);
-    let MAZE_HEIGHT = randomNumber(4, 6);
+    let mazeWidth = randomNumber(4, 30);
+    let mazeHeight = randomNumber(4, 30);
 
-    let newMaze = generateMaze(MAZE_WIDTH, MAZE_HEIGHT);
-    let newItems = generateItems(MAZE_WIDTH, MAZE_HEIGHT, newMaze);
+    let newMaze = generateMaze(mazeWidth, mazeHeight);
+    let newItems = generateItems(mazeWidth, mazeHeight, newMaze);
 
     setMaze(newMaze);
     setItems(newItems);
-    setExitPoint([newMaze[MAZE_HEIGHT - 1].indexOf("p"), MAZE_HEIGHT - 1]);
+    setExitPoint([newMaze[mazeHeight - 1].indexOf("p"), mazeHeight - 1]);
     setPlayerPosition([newMaze[0].indexOf("p"), 0]);
   }
 
@@ -66,16 +54,13 @@ export default function Page() {
   }
 
   function toggleSong() {
-    setPlaySong(!playSong);
+    SFX.theme.playing() ? SFX.theme.pause() : SFX.theme.play();
+    forceUpdate();
   }
 
-  useEffect(() => {
-    if (!playSong) {
-      themeSong.pause();
-      return;
-    }
-    themeSong.play();
-  }, [playSong]);
+  function toggleLang() {
+    lang === "en" ? setLang("fa") : setLang("en");
+  }
 
   useEffect(() => {
     const [x, y] = playerPosition;
@@ -83,7 +68,7 @@ export default function Page() {
     let touchedItem = items.find((item) => item.x == x && item.y == y);
     if (touchedItem) {
       setScore((score) => score + SCORES[touchedItem.name]);
-      SOUNDS[touchedItem.name].play();
+      SFX[touchedItem.name].play();
       let removedItems = items.filter((item) => item != touchedItem);
       setItems(removedItems);
     }
@@ -103,8 +88,7 @@ export default function Page() {
     e.preventDefault();
     if (canPlay) {
       const [x, y] = playerPosition;
-      clickSound.volume = 0.1;
-      clickSound.play();
+      SFX.click.play();
 
       if ((e.code === "ArrowUp" || e.code === "KeyW") && maze[y - 1][x] === "p") {
         setPlayerPosition([x, y - 1]);
@@ -125,7 +109,15 @@ export default function Page() {
 
   return (
     <div className={css.app}>
-      <HUD openHelp={() => setShowHelp(true)} newGame={handeNewGame} score={score} toggleSong={toggleSong} />
+      <HUD
+        openHelp={() => setShowHelp(true)}
+        newGame={handeNewGame}
+        score={score}
+        toggleSong={toggleSong}
+        songIsPlaying={SFX.theme.playing()}
+        lang={lang}
+        toggleLang={toggleLang}
+      />
       <Maze handleMove={handleMove} maze={maze}>
         <Player position={playerPosition} face={playerFace} />
         {items?.map((item) => {
@@ -139,8 +131,8 @@ export default function Page() {
             setShowResult(false);
           }}
         >
-          {showHelp && <HelpModal />}
-          {showResult && <ResultModal button={handleModalNewGame} score={score} />}
+          {/* {showHelp && <HelpModal />} */}
+          {showResult && <ResultModal button={handleModalNewGame} score={score} lang={lang} />}
         </ModalOverlay>
       )}
     </div>
